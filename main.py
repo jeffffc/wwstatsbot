@@ -67,7 +67,10 @@ def display_stats(bot, update):
     stats = get_stats(user_id)
     achievements = get_achievement_count(user_id)
 
-    msg =  "<a href=\"https://telegram.me/" + str(username) + "\">" + str(name) + " the " + stats['most_common_role']['role'] + "</a>\n"
+    if username == "":
+        msg =  str(name) + " the " + stats['most_common_role']['role'] + "\n"
+    else:
+        msg =  "<a href=\"https://telegram.me/" + str(username) + "\">" + str(name) + " the " + stats['most_common_role']['role'] + "</a>\n"
     msg += "<code>{:<5}</code> Achievements Unlocked!\n".format(achievements)
     msg += "<code>{:<5}</code> Games Won <code>({})</code>\n".format(stats['games_won']['number'], stats['games_won']['percent'])
     msg += "<code>{:<5}</code> Games Lost <code>({})</code>\n".format(stats['games_lost']['number'], stats['games_lost']['percent'])
