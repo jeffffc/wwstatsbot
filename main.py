@@ -13,6 +13,7 @@ import logging
 from telegram import ParseMode
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
+from telegram.ext.dispatcher import run_async
 from bs4 import BeautifulSoup
 
 from config import *
@@ -23,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 telegram_api_token =  BOT_TOKEN
 
+@run_async
 def get_stats(user_id):
     stats = {}
     wuff_url = "http://www.tgwerewolf.com/Stats/PlayerStats/?pid={}"
@@ -41,6 +43,8 @@ def get_stats(user_id):
 
     return stats
 
+
+@run_async
 def get_achievement_count(user_id):
     wuff_url = "http://www.tgwerewolf.com/Stats/PlayerAchievements/?pid={}"
 
@@ -52,6 +56,8 @@ def get_achievement_count(user_id):
 
     return count
 
+
+@run_async
 def display_stats(bot, update):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
@@ -72,7 +78,7 @@ def display_stats(bot, update):
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
-
+@run_async
 def display_about(bot, update):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
@@ -93,7 +99,7 @@ def startme(bot, update):
         return
 
 
-
+@run_async
 def display_achv(bot, update):
     user_id = update.message.from_user.id
     msg1, msg2 = wwstats.check(user_id)
