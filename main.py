@@ -67,7 +67,7 @@ def display_stats(bot, update):
     msg += "<code>{:<5}</code> Games Lost <code>({})</code>\n".format(stats['games_lost']['number'], stats['games_lost']['percent'])
     msg += "<code>{:<5}</code> Games Survived <code>({})</code>\n".format(stats['games_survived']['number'], stats['games_survived']['percent'])
     msg += "<code>{:<5}</code> Total Games\n".format(stats['games_played'])
-    msg += "<code>{:>5}</code> times I've gleefully killed {}\n".format(stats['most_killed']['times'], stats['most_killed']['name'])
+    msg += "<code>{:<5}</code> times I've gleefully killed {}\n".format(stats['most_killed']['times'], stats['most_killed']['name'])
     msg += "<code>{:<5}</code> times I've been slaughted by {}\n\n".format(stats['most_killed_by']['times'], stats['most_killed_by']['name'])
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
