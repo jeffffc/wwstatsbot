@@ -57,7 +57,7 @@ def get_achievement_count(user_id):
     return count
 
 
-@run_async
+#@run_async
 def display_stats(bot, update):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
