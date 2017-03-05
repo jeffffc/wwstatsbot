@@ -38,18 +38,18 @@ def get_stats(user_id):
     stats['most_common_role'] = { 'role': dump('td')[12].string, 'times': dump('td')[13].string[:-6] }
     stats['most_killed'] = { 'name': dump('td')[15].string, 'times': dump('td')[16].string[:-6] }
     stats['most_killed_by'] = { 'name': dump('td')[18].string, 'times': dump('td')[19].string[:-6] }
-    
+
     return stats
-    
+
 def get_achievement_count(user_id):
     wuff_url = "http://www.tgwerewolf.com/Stats/PlayerAchievements/?pid={}"
-    
+
     r = requests.get(wuff_url.format(user_id))
-    
+
     dump = BeautifulSoup(r.json(), 'html.parser')
-    
+
     count = int(len(dump('td')) / 2)
-    
+
     return count
 
 def display_stats(bot, update):
@@ -57,34 +57,34 @@ def display_stats(bot, update):
     user_id = update.message.from_user.id
     name = update.message.from_user.first_name
     username = update.message.from_user.username
-    
+
     stats = get_stats(user_id)
     achievements = get_achievement_count(user_id)
-    
+
     msg =  "<a href=\"https://telegram.me/" + str(username) + "\">" + str(name) + " the " + stats['most_common_role']['role'] + "</a>\n"
-    msg += "<code>{:<4}</code> Achievements Unlocked!\n".format(achievements)
-    msg += "<code>{:<4}</code> Games Won <code>({})</code>\n".format(stats['games_won']['number'], stats['games_won']['percent'])
-    msg += "<code>{:<4}</code> Games Lost <code>({})</code>\n".format(stats['games_lost']['number'], stats['games_lost']['percent'])
-    msg += "<code>{:<4}</code> Games Survived <code>({})</code>\n".format(stats['games_survived']['number'], stats['games_survived']['percent'])
-    msg += "<code>{:<4}</code><b> Total Games</b>\n".format(stats['games_played'])
-    msg += "<code>{}</code><b> times I've gleefully killed {}</b>\n".format(stats['most_killed']['times'], stats['most_killed']['name'])
-    msg += "<code>{}</code><b> times I've been slaughted by {}</b>\n\n".format(stats['most_killed_by']['times'], stats['most_killed_by']['name'])
+    msg += "<code>{:<5}</code> Achievements Unlocked!\n".format(achievements)
+    msg += "<code>{:<5}</code> Games Won <code>({})</code>\n".format(stats['games_won']['number'], stats['games_won']['percent'])
+    msg += "<code>{:<5}</code> Games Lost <code>({})</code>\n".format(stats['games_lost']['number'], stats['games_lost']['percent'])
+    msg += "<code>{:<5}</code> Games Survived <code>({})</code>\n".format(stats['games_survived']['number'], stats['games_survived']['percent'])
+    msg += "<code>{:<5}</code> Total Games\n".format(stats['games_played'])
+    msg += "<code>{;>5}</code> times I've gleefully killed {}\n".format(stats['most_killed']['times'], stats['most_killed']['name'])
+    msg += "<code>{:<5}</code> times I've been slaughted by {}\n\n".format(stats['most_killed_by']['times'], stats['most_killed_by']['name'])
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
-    
+
 def display_about(bot, update):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
     name = update.message.from_user.first_name
     username = update.message.from_user.username
-
-    msg = "This is a editted version to the old @wolfcardbot.\n"
-    msg += "Click [here](http://pastebin.com/efZ4CPXJ) to check the original source code."
+    msg = "Use /stats for stats. Use /achievements or /achv for achivement lisy."
+    msg += "\n\nThis is a editted version to the old @wolfcardbot.\n"
+    msg += "Click [here](http://pastebin.com/efZ4CPXJ) to check the original source code.\n"
     msg += "Click [here](https://github.com/jeffffc/wwstatsbot) for the source code of the current project."
 
     bot.sendMessage(chat_id, msg, parse_mode="Markdown", disable_web_page_preview=True)
-    
+
 
 def startme(bot, update):
     if update.message.chat.type == 'private':
@@ -109,12 +109,12 @@ def display_achv(bot, update):
 def main():
     u = Updater(token=telegram_api_token)
     d = u.dispatcher
-        
+
     d.add_handler(CommandHandler('start', startme))
     d.add_handler(CommandHandler('stats', display_stats))
     d.add_handler(CommandHandler('about', display_about))
     d.add_handler(CommandHandler('achievements', display_achv))
-
+    d.add_handler(CommandHandler('achv', display_achv))
     u.start_polling()
     u.idle()
 
