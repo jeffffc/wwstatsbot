@@ -81,9 +81,17 @@ def display_about(bot, update):
 
     msg = "This is a editted version to the old @wolfcardbot.\n"
     msg += "Click [here](http://pastebin.com/efZ4CPXJ) to check the original source code."
+    msg += "Click [here](https://github.com/jeffffc/wwstatsbot) for the source code of the current project."
 
     bot.sendMessage(chat_id, msg, parse_mode="Markdown", disable_web_page_preview=True)
     
+
+def startme(bot, update):
+    if update.message.chat.type == 'private':
+        update.message.reply_text("Thank you for starting me. Use /stats and /achievements to check your related stats!")
+    else:
+        return
+
 
 
 def display_achv(bot, update):
@@ -102,6 +110,7 @@ def main():
     u = Updater(token=telegram_api_token)
     d = u.dispatcher
         
+    d.add_handler(CommandHandler('start', startme))
     d.add_handler(CommandHandler('stats', display_stats))
     d.add_handler(CommandHandler('about', display_about))
     d.add_handler(CommandHandler('achievements', display_achv))
