@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 telegram_api_token =  BOT_TOKEN
 
-@run_async
+#@run_async
 def get_stats(user_id):
     stats = {}
     wuff_url = "http://www.tgwerewolf.com/Stats/PlayerStats/?pid={}"
@@ -44,7 +44,7 @@ def get_stats(user_id):
     return stats
 
 
-@run_async
+#@run_async
 def get_achievement_count(user_id):
     wuff_url = "http://www.tgwerewolf.com/Stats/PlayerAchievements/?pid={}"
 
@@ -57,7 +57,7 @@ def get_achievement_count(user_id):
     return count
 
 
-#@run_async
+@run_async
 def display_stats(bot, update):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
