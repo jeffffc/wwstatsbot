@@ -15,6 +15,7 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from telegram.ext.dispatcher import run_async
 from bs4 import BeautifulSoup
+import datetime
 
 from config import *
 import wwstats
@@ -111,7 +112,7 @@ def display_achv(bot, update):
     user_id = update.message.from_user.id
     name = update.message.from_user.first_name
 
-    print("%s - %s (%d) - stats" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
+    print("%s - %s (%d) - achv" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
 
     msg1, msg2 = wwstats.check(user_id)
 
