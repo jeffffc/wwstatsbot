@@ -57,7 +57,7 @@ def get_achievement_count(user_id):
     return count
 
 
-@run_async
+#@run_async
 def display_stats(bot, update):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
@@ -85,7 +85,7 @@ def display_stats(bot, update):
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
-@run_async
+#@run_async
 def display_about(bot, update):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
@@ -106,7 +106,7 @@ def startme(bot, update):
         return
 
 
-@run_async
+#@run_async
 def display_achv(bot, update):
     user_id = update.message.from_user.id
     name = update.message.from_user.first_name
