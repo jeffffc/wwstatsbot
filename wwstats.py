@@ -30,33 +30,35 @@ def check(id):
         stats[num] = db[i].string
         num = num + 1
 
-    msg = "ATTAINED ({0}/{1}):\n".format(str(len(stats)), str(len(ACHV)))
+    msg = "*ATTAINED ({0}/{1}):*\n".format(str(len(stats)), str(len(ACHV)))
 
     for x in stats:
         if stats[x] in [y['name'] for y in ACHV]:
             msg += "- `" + stats[x] + "`\n"
 
 
-    msg2 = "\nMISSING ({0}/{1}):\n".format(str(len(ACHV)-len(stats)), str(len(ACHV)))
-    msg2 += "--> ATTAINABLE VIA PLAYING:\n"
+    msg2 = "\n*MISSING ({0}/{1}):*\n".format(str(len(ACHV)-len(stats)), str(len(ACHV)))
+    msg2 += "*--> ATTAINABLE VIA PLAYING:*\n"
     for z in ACHV:
         if z['name'] not in stats.values():
             if "inactive" in z or "not_via_playing" in z:
                 continue
             msg2 += "- `" + z['name'] + "`\n"
             msg2 += ">>> _" + z['desc'] + "_\n"
-    msg2 += "\n--> NOT ATTAINABLE VIA PLAYING:\n"
+    msg2 += "\n--> *NOT DIRECTLY ATTAINABLE VIA PLAYING:*\n"
     for z in ACHV:
         if z['name'] not in stats.values():
             if "not_via_playing" in z:
                 msg2 += "- `" + z['name'] + "`\n"
+                msg2 += ">>> _" + z['desc'] + "_\n"
             else:
                 continue
-    msg2 += "\n--> INACTIVE:\n"
+    msg2 += "\n--> *INACTIVE:*\n"
     for z in ACHV:
         if z['name'] not in stats.values():
             if "inactive" in z:
                 msg2 += "- `" + z['name'] + "`\n"
+                msg2 += ">>> _" + z['desc'] + "_\n"
             else:
                 continue
 
