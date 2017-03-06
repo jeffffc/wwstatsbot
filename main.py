@@ -64,8 +64,12 @@ def display_stats(bot, update):
     name = update.message.from_user.first_name
     username = update.message.from_user.username
 
+    print("%s - %s (%d) - stats" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
+
+
     stats = get_stats(user_id)
     achievements = get_achievement_count(user_id)
+
 
     if username == "":
         msg =  str(name) + " the " + stats['most_common_role']['role'] + "\n"
@@ -105,7 +109,12 @@ def startme(bot, update):
 @run_async
 def display_achv(bot, update):
     user_id = update.message.from_user.id
+    name = update.message.from_user.first_name
+
+    print("%s - %s (%d) - stats" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
+
     msg1, msg2 = wwstats.check(user_id)
+
     try:
         bot.sendMessage(chat_id = user_id, text = msg1, parse_mode='Markdown')
         bot.sendMessage(chat_id = user_id, text = msg2, parse_mode='Markdown')
