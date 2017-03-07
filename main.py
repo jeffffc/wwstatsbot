@@ -122,7 +122,8 @@ def display_achv(bot, update):
         if update.message.chat.type != 'private':
             update.message.reply_text("I have sent you your achievement list in PM.")
     except:
-        keyboard = [[InlineKeyboardButton("Start Me!", callback_data = 'startme')]]
+        url = "telegram.me/" + BOT_USERNAME
+        keyboard = [[InlineKeyboardButton("Start Me!", url = url)]]
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text("You have to start me in PM first.", reply_markup = reply_markup)
 
