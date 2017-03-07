@@ -10,9 +10,9 @@
 import requests
 import logging
 
-from telegram import ParseMode
+from telegram import ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater
-from telegram.ext import CommandHandler
+from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram.ext.dispatcher import run_async
 from bs4 import BeautifulSoup
 import datetime
@@ -122,8 +122,17 @@ def display_achv(bot, update):
         if update.message.chat.type != 'private':
             update.message.reply_text("I have sent you your achievement list in PM.")
     except:
-        update.message.reply_text("You have to start me in PM first.")
+        keyboard = [[InlineKeyboardButton("Start Me!", callback_data = 'startme')]]
+        reply_markup = keyboard
+        update.message.reply_text("You have to start me in PM first.", reply_markup = reply_markup)
 
+
+def button(bot, update):
+    query = update.callback_query
+    if query.data == 'startme':
+        url = "telegram.me/" + BOT_USERNAME
+        query.answer(url = url)
+        return
 
 def main():
     u = Updater(token=telegram_api_token)
@@ -134,6 +143,7 @@ def main():
     d.add_handler(CommandHandler('about', display_about))
     d.add_handler(CommandHandler('achievements', display_achv))
     d.add_handler(CommandHandler('achv', display_achv))
+    dp.add_handler(CallbackQueryHandler(button))
     u.start_polling()
     u.idle()
 
