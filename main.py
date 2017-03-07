@@ -123,7 +123,7 @@ def display_achv(bot, update):
             update.message.reply_text("I have sent you your achievement list in PM.")
     except:
         keyboard = [[InlineKeyboardButton("Start Me!", callback_data = 'startme')]]
-        reply_markup = keyboard
+        reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text("You have to start me in PM first.", reply_markup = reply_markup)
 
 
