@@ -143,7 +143,7 @@ def main():
     d.add_handler(CommandHandler('about', display_about))
     d.add_handler(CommandHandler('achievements', display_achv))
     d.add_handler(CommandHandler('achv', display_achv))
-    dp.add_handler(CallbackQueryHandler(button))
+    d.add_handler(CallbackQueryHandler(button))
     u.start_polling()
     u.idle()
 
