@@ -128,13 +128,6 @@ def display_achv(bot, update):
         update.message.reply_text("You have to start me in PM first.", reply_markup = reply_markup)
 
 
-def button(bot, update):
-    query = update.callback_query
-    if query.data == 'startme':
-        url = "telegram.me/" + BOT_USERNAME
-        query.answer(url = url)
-        return
-
 def main():
     u = Updater(token=telegram_api_token)
     d = u.dispatcher
@@ -144,7 +137,6 @@ def main():
     d.add_handler(CommandHandler('about', display_about))
     d.add_handler(CommandHandler('achievements', display_achv))
     d.add_handler(CommandHandler('achv', display_achv))
-    d.add_handler(CallbackQueryHandler(button))
     u.start_polling()
     u.idle()
 
