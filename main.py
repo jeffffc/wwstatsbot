@@ -72,7 +72,7 @@ def display_stats(bot, update):
     achievements = get_achievement_count(user_id)
 
 
-    if username == "":
+    if username is None:
         msg =  str(name) + " the " + stats['most_common_role']['role'] + "\n"
     else:
         msg =  "<a href='https://telegram.me/" + str(username) + "'>" + str(name) + " the " + stats['most_common_role']['role'] + "</a>\n"
