@@ -137,7 +137,7 @@ def main():
     d.add_handler(CommandHandler('about', display_about))
     d.add_handler(CommandHandler('achievements', display_achv))
     d.add_handler(CommandHandler('achv', display_achv))
-    u.start_polling()
+    u.start_polling(clean=True)
     u.idle()
 
 if __name__ == '__main__':
