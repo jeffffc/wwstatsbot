@@ -61,16 +61,17 @@ def get_achievement_count(user_id):
 #@run_async
 def display_stats(bot, update):
     chat_id = update.message.chat_id
-    user_id = update.message.from_user.id
-    name = update.message.from_user.first_name
-    username = update.message.from_user.username
-
-    print("%s - %s (%d) - stats" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
-
     if update.message.reply_to_message is not None:
         user_id = update.message.reply_to_message.from_user.id
         name = update.message.reply_to_message.from_user.first_name
         username = update.message.from_user.username
+    else:
+        user_id = update.message.from_user.id
+        name = update.message.from_user.first_name
+        username = update.message.from_user.username
+
+    print("%s - %s (%d) - stats" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
+
     stats = get_stats(user_id)
     achievements = get_achievement_count(user_id)
 
