@@ -53,7 +53,7 @@ def check(id):
                 msg2 += ">>> _" + z['desc'] + "_\n"
             else:
                 continue
-    msg2 += "\n--> *INACTIVE:*\n"
+    msg2 += "\n--> *INACTIVE: *\n"
     for z in ACHV:
         if z['name'] not in stats.values():
             if "inactive" in z:
