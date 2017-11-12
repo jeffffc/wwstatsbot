@@ -64,7 +64,7 @@ def display_stats(bot, update):
     if update.message.reply_to_message is not None:
         user_id = update.message.reply_to_message.from_user.id
         name = update.message.reply_to_message.from_user.first_name
-        username = update.message.from_user.username
+        username = update.message.reply_to_message.from_user.username
     else:
         user_id = update.message.from_user.id
         name = update.message.from_user.first_name
