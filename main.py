@@ -97,7 +97,7 @@ def display_about(bot, update):
     name = update.message.from_user.first_name
     username = update.message.from_user.username
     msg = "Use /stats for stats. Use /achievements or /achv for achivement list."
-    msg += "\n\nThis is an edited version to the old @wolfcardbot.\n"
+    msg += "\n\nThis is an edited version to the old wolfcardbot.\n"
     msg += "Click [here](http://pastebin.com/efZ4CPXJ) to check the original source code.\n"
     msg += "Click [here](https://github.com/jeffffc/wwstatsbot) for the source code of the current project."
 
