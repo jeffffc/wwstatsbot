@@ -64,7 +64,7 @@ def display_stats(bot, update):
     if update.message.reply_to_message is not None:
         user_id = update.message.reply_to_message.from_user.id
         name = update.message.reply_to_message.from_user.first_name
-        username = update.message.from_user.username
+        username = update.message.reply_to_message.from_user.username
     else:
         user_id = update.message.from_user.id
         name = update.message.from_user.first_name
@@ -97,7 +97,7 @@ def display_about(bot, update):
     name = update.message.from_user.first_name
     username = update.message.from_user.username
     msg = "Use /stats for stats. Use /achievements or /achv for achivement list."
-    msg += "\n\nThis is an edited version to the old @wolfcardbot.\n"
+    msg += "\n\nThis is an edited version to the old wolfcardbot.\n"
     msg += "Click [here](http://pastebin.com/efZ4CPXJ) to check the original source code.\n"
     msg += "Click [here](https://github.com/jeffffc/wwstatsbot) for the source code of the current project."
 
