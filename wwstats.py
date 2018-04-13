@@ -1,64 +1,47 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*
 
-from bs4 import BeautifulSoup
-from bs4 import UnicodeDammit
 import requests
-import urllib.request
-import urllib.parse
-import codecs
-from achvlist import *
+from achvlist import ACHV
 
-def check(id):
-    url = "http://tgwerewolf.com/stats/PlayerAchievements/?pid=" + str(id)
-    stats = {}
-    #url = urllib.parse.quote(url)
-#    r = requests.get(url)
-#    soup = BeautifulSoup(r.content)
-#    soup = str(r.content)
-#    output = soup.prettify("utf-8")
-#    output = soup.encode("utf-8")
-#    output = UnicodeDammit(soup)
-#    output = codecs.decode(soup, 'unicode_escape').encode('latin1').decode('utf8')
-#    print(output)
-    r = requests.get(url)
-
-    dump = BeautifulSoup(r.json(), 'html.parser')
-    db = dump('td')
-    num = 0
-    for i in range(0, len(db), 2):
-        stats[num] = db[i].string
-        num = num + 1
-
-    msg = "*ATTAINED ({0}/{1}):*\n".format(str(len(stats)), str(len(ACHV)))
-
-    for x in stats:
-        if stats[x] in [y['name'] for y in ACHV]:
-            msg += "- `" + stats[x] + "`\n"
+achv_names = [y['name'] for y in ACHV]
+total = len(ACHV)
 
 
-    msg2 = "\n*MISSING ({0}/{1}):*\n".format(str(len(ACHV)-len(stats)), str(len(ACHV)))
+def check(userid):
+    url = "http://tgwerewolf.com/stats/PlayerAchievements/?pid={}&json=true".format(userid)
+    stats = requests.get(url).json()
+    attained_count = len(stats)
+    attained_names = [each['name'] for each in stats]
+
+    msg = "*ATTAINED ({0}/{1}):*\n".format(attained_count, total)
+
+    for each in stats:
+        if each['name'] in achv_names:
+            msg += "- `{}`\n".format(each['name'])
+
+    msg2 = "\n*MISSING ({0}/{1}):*\n".format(total - attained_count, total)
     msg2 += "*--> ATTAINABLE VIA PLAYING:*\n"
     for z in ACHV:
-        if z['name'] not in stats.values():
+        if z['name'] not in attained_names:
             if "inactive" in z or "not_via_playing" in z:
                 continue
-            msg2 += "- `" + z['name'] + "`\n"
-            msg2 += ">>> _" + z['desc'] + "_\n"
+            msg2 += " -`{}`\n".format(z['name'])
+            msg2 += ">>> _{}_\n".format(z['desc'])
     msg2 += "\n--> *NOT DIRECTLY ATTAINABLE VIA PLAYING:*\n"
     for z in ACHV:
-        if z['name'] not in stats.values():
+        if z['name'] not in attained_names:
             if "not_via_playing" in z:
-                msg2 += "- `" + z['name'] + "`\n"
-                msg2 += ">>> _" + z['desc'] + "_\n"
+                msg2 += " -`{}`\n".format(z['name'])
+                msg2 += ">>> _{}_\n".format(z['desc'])
             else:
                 continue
     msg2 += "\n--> *INACTIVE: *\n"
     for z in ACHV:
-        if z['name'] not in stats.values():
+        if z['name'] not in attained_names:
             if "inactive" in z:
-                msg2 += "- `" + z['name'] + "`\n"
-                msg2 += ">>> _" + z['desc'] + "_\n"
+                msg2 += " -`{}`\n".format(z['name'])
+                msg2 += ">>> _{}_\n".format(z['desc'])
             else:
                 continue
 
