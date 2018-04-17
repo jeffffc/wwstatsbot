@@ -107,7 +107,7 @@ def display_achv(bot, update):
 
 
 def error_handler(bot, update, error):
-    e = error.msg.lower()
+    e = str(error).lower()
     if "timed out" in e or "not modified" in e or "query_id_invalid" in e:
         return
     msg = "This update caused error.\n"
