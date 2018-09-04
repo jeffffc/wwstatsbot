@@ -92,11 +92,11 @@ def display_achv(bot, update):
 
     print("%s - %s (%d) - achv" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
 
-    msg1, msg2 = wwstats.check(user_id)
+    msgs = wwstats.check(user_id)
 
     try:
-        bot.sendMessage(chat_id = user_id, text=msg1, parse_mode='Markdown')
-        bot.sendMessage(chat_id = user_id, text=msg2, parse_mode='Markdown')
+        for msg in msgs:
+            bot.sendMessage(chat_id = user_id, text=msg, parse_mode='Markdown')
         if update.message.chat.type != 'private':
             update.message.reply_text("I have sent you your achievement list in PM.")
     except:
