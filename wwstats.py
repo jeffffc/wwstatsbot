@@ -31,7 +31,7 @@ def check(userid):
     msg = header + "```" + msg + "```"
     msgs.append(msg)
     
-    main = "MISSING ({0}/{1}):*\n\n".format(total - attained_count , total)
+    main = "*MISSING ({0}/{1}):*\n\n".format(total - attained_count , total)
     missing_header = "*MISSING AND ATTAINABLE VIA PLAYING ({0}/{1}):*\n\n".format(len(missing) , total)
     missing_msgs = []
     for z in missing:
