@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*
-
 import requests
 from achvlist import ACHV
 
@@ -24,48 +21,48 @@ def check(userid):
     missing = [z for z in ACHV if z['name'] not in attained_names and not ("inactive" in z or "not_via_playing" in z)]
     
     msgs = []
-    msg = "*ATTAINED ({0}/{1}):*\n".format(attained_count, total)
+    header = "*ATTAINED ({0}/{1}):*\n".format(attained_count, total)
+    msg = ""
     
     for each in stats:
         if each['name'] in achv_names:
             msg += "- {}\n".format(each['name'])
     
-    msg = "```" + msg + "```"
-    msgs += msg
+    msg = header + "```" + msg + "```"
+    msgs.append(msg)
     
     main = "MISSING ({0}/{1}):*\n\n".format(total - attained_count , total)
-    missing_header = "\n*MISSING AND ATTAINABLE VIA PLAYING ({0}/{1}):*\n\n".format(len(missing) , total)
+    missing_header = "*MISSING AND ATTAINABLE VIA PLAYING ({0}/{1}):*\n\n".format(len(missing) , total)
     missing_msgs = []
     for z in missing:
         msg1 = "`- {}`\n".format(z['name'])
         msg1 += ">>> _{}_\n".format(z['desc'])
-        missing_msgs += msg1
+        missing_msgs.append(msg1)
+    for each in chunks(missing_msgs, 30):
+        msg = main + missing_header
+        msg += "".join(each)
+        msgs.append(msg)
     
-    for each in chunks(missing_msgs, 20):
-        m = main + missing_header
-        m += "".join(each)
-        msgs += m
-    
-    not_via_playing_header = "\n*NOT DIRECTLY ATTAINABLE VIA PLAYING ({0}/{1}):*\n\n".format(len(not_via_playing) , total)
+    not_via_playing_header = "*NOT DIRECTLY ATTAINABLE VIA PLAYING ({0}/{1}):*\n\n".format(len(not_via_playing) , total)
     not_via_playing_msgs = []
     for z in not_via_playing:
         msg1 = "`- {}`\n".format(z['name'])
         msg1 += ">>> _{}_\n".format(z['desc'])
-        not_via_playing_msgs += msg1
-    for each in chunks(not_via_playing_msgs, 20):
-        m = main + not_via_playing_header
-        m += "".join(each)
-        msgs += m
+        not_via_playing_msgs.append(msg1)
+    for each in chunks(not_via_playing_msgs, 30):
+        msg = main + not_via_playing_header
+        msg += "".join(each)
+        msgs.append(msg)
     
     inactive_header = "\n*INACTIVE ({0}/{1}):*\n\n".format(len(inactive) , total)
     inactive_msgs = []
     for z in inactive:
         msg1 = "`- {}`\n".format(z['name'])
         msg1 += ">>> _{}_\n".format(z['desc'])
-        inactive_msgs += msg1
-    for each in chunks(inactive_msgs, 20):
-        m = main + inactive_header
-        m += "".join(each)
-        msgs += m
+        inactive_msgs.append(msg1)
+    for each in chunks(inactive_msgs, 30):
+        msg = main + inactive_header
+        msg += "".join(each)
+        msgs.append(msg)
     
     return msgs
