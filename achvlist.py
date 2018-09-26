@@ -71,4 +71,5 @@ ACHV = [{"name": "Welcome to Hell", "desc": "Play a game"},
         {"name": "That Came Unexpected!", "desc": "As tanner, be lynched and win the game when there are only 3 persons left"},
         {"name": "Now I'm Blind", "desc": "As the oracle, fail to get a vision because everyone else has the same role."},
         {"name": "Every Man for Himself!", "desc": "As the pacifist, save yourself from being lynched (at least 50% of votes have been cast for you already)"},
-        {"name": "My Sweetie so Strong!", "desc": "Be in love with the pacifist, and get saved from being lynched by them (at least 50% of votes have been cast for you already)"}]
+        {"name": "My Sweetie so Strong!", "desc": "Be in love with the pacifist, and get saved from being lynched by them (at least 50% of votes have been cast for you already)"},
+		{"name": "Cult Leader", "desc": "Be a cultist from the beginning of the game, survive and win."}]
