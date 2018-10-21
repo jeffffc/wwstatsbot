@@ -75,4 +75,4 @@ ACHV = [{"name": "Welcome to Hell", "desc": "Play a game"},
         {"name": "Cult Leader", "desc": "Be a cultist from the beginning of the game, survive and win."},
         {"name": "Death Village", "desc": "Participate in a game that has no winner."},
         {"name": "I Lost my Wisdom", "desc": "As the wise elder, change your role! Suddenly you're not that wise anymore..."},
-        {"name": "Thanks, Junior", "desc": "Be a wolf that eats somebody while the rest of the pack is drunk (ate drunk yesterday night but you became wolf later)"}]
+        {"name": "Thanks, Junior!", "desc": "After the wolf pack ate the drunk, you turn werewolf and successfully eat someone!"}]
