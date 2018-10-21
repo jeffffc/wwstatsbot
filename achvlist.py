@@ -72,4 +72,7 @@ ACHV = [{"name": "Welcome to Hell", "desc": "Play a game"},
         {"name": "Now I'm Blind", "desc": "As the oracle, fail to get a vision because everyone else has the same role."},
         {"name": "Every Man for Himself!", "desc": "As the pacifist, save yourself from being lynched (at least 50% of votes have been cast for you already)"},
         {"name": "My Sweetie so Strong!", "desc": "Be in love with the pacifist, and get saved from being lynched by them (at least 50% of votes have been cast for you already)"},
-		{"name": "Cult Leader", "desc": "Be a cultist from the beginning of the game, survive and win."}]
+        {"name": "Cult Leader", "desc": "Be a cultist from the beginning of the game, survive and win."},
+        {"name": "Death Village", "desc": "Participate in a game that has no winner."},
+        {"name": "I Lost my Wisdom", "desc": "As the wise elder, change your role! Suddenly you're not that wise anymore..."},
+        {"name": "Thanks, Junior", "desc": "Be a wolf that eats somebody while the rest of the pack is drunk (ate drunk yesterday night but you became wolf later)"}]
