@@ -75,4 +75,9 @@ ACHV = [{"name": "Welcome to Hell", "desc": "Play a game"},
         {"name": "Cult Leader", "desc": "Be a cultist from the beginning of the game, survive and win."},
         {"name": "Death Village", "desc": "Participate in a game that has no winner."},
         {"name": "I Lost my Wisdom", "desc": "As the wise elder, change your role! Suddenly you're not that wise anymore..."},
-        {"name": "Thanks, Junior!", "desc": "After the wolf pack ate the drunk, you turn werewolf and successfully eat someone!"}]
+        {"name": "Thanks, Junior!", "desc": "After the wolf pack ate the Drunk, you turn into a wolf and can try to eat someone while the rest of the wolf pack is drunk!"},
+        {"name": "Condition Red!", "desc": "As the last wolf alive, eat the traitor. Oh no!"},
+        {"name": "Affectionate", "desc": "As the harlot, visit your lover!"},
+        {"name": "Lucky Day", "desc": "As the Alpha Wolf, infect the drunk and stay sober! Phew..."},
+        {"name": "Indestructible", "desc": "Become Doppelgänger or Wild Child with your role model being yourself!"},
+        {"name": "Psychopath Killer", "desc": "As the serial killer, win a game with 35 players!"}]
