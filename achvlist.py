@@ -80,4 +80,5 @@ ACHV = [{"name": "Welcome to Hell", "desc": "Play a game"},
         {"name": "Affectionate", "desc": "As the harlot, visit your lover!"},
         {"name": "Lucky Day", "desc": "As the Alpha Wolf, infect the drunk and stay sober! Phew..."},
         {"name": "Indestructible", "desc": "Become Doppelgänger or Wild Child with your role model being yourself!"},
-        {"name": "Psychopath Killer", "desc": "As the serial killer, win a game with 35 players!"}]
+        {"name": "Psychopath Killer", "desc": "As the serial killer, win a game with 35 players!"},
+        {"name": "Today's Special!", "desc": "Be the role only available on special events!"}]
