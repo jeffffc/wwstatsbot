@@ -122,14 +122,22 @@ def display_deaths(bot, update):
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 	
 @run_async	
-def display_stats(bot, update):
+def display_stats(bot, update, args):
     chat_id = update.message.chat_id
     if update.message.reply_to_message is not None:
         user_id = update.message.reply_to_message.from_user.id
         name = update.message.reply_to_message.from_user.first_name
     else:
-        user_id = update.message.from_user.id
-        name = update.message.from_user.first_name
+        if args:
+	    try:
+                user_id = int(args[0])
+                name = args[0]
+            except:
+                user_id = update.message.from_user.id
+                name = update.message.from_user.first_name
+        else:
+            user_id = update.message.from_user.id
+            name = update.message.from_user.first_name
 
     print("%s - %s (%d) - stats" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
 
@@ -205,7 +213,7 @@ def main():
     d = u.dispatcher
 
     d.add_handler(CommandHandler('start', startme))
-    d.add_handler(CommandHandler('stats', display_stats))
+    d.add_handler(CommandHandler('stats', display_stats, pass_args=True))
     d.add_handler(CommandHandler('kills', display_kills))
     d.add_handler(CommandHandler('killedby', display_killed_by))
     d.add_handler(CommandHandler('deaths', display_deaths))
