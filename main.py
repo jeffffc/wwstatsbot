@@ -138,7 +138,7 @@ def display_stats(bot, update, args):
         else:
             user_id = update.message.from_user.id
             name = update.message.from_user.first_name
-
+    
     print("%s - %s (%d) - stats" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
 
     stats = get_stats(user_id)
