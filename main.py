@@ -123,6 +123,7 @@ def display_deaths(bot, update):
 	
 @run_async	
 def display_stats(bot, update, args):
+    by_id = False
     chat_id = update.message.chat_id
     if update.message.reply_to_message is not None:
         user_id = update.message.reply_to_message.from_user.id
@@ -132,6 +133,7 @@ def display_stats(bot, update, args):
             try:
                 user_id = int(args[0])
                 name = args[0]
+                by_id = True
             except:
                 user_id = update.message.from_user.id
                 name = update.message.from_user.first_name
@@ -143,18 +145,21 @@ def display_stats(bot, update, args):
 
     stats = get_stats(user_id)
     achievements = get_achievement_count(user_id)
-
-    msg = "<a href='tg://user?id={}'>{} the {}</a>\n".format(user_id, name, stats['mostCommonRole'])
-    msg += "<code>{:<5}</code> Achievements Unlocked!\n".format(achievements)
-    msg += "<code>{:<5}</code> Games Won <code>({}%)</code>\n".format(stats['won']['total'], stats['won']['percent'])
-    msg += "<code>{:<5}</code> Games Lost <code>({}%)</code>\n".format(stats['lost']['total'], stats['lost']['percent'])
-    msg += "<code>{:<5}</code> Games Survived <code>({}%)</code>\n".format(
-        stats['survived']['total'], stats['survived']['percent'])
-    msg += "<code>{:<5}</code> Total Games\n".format(stats['gamesPlayed'])
-    msg += "<code>{:<5}</code> times I've gleefully killed {}\n".format(
-        stats['mostKilled']['times'], stats['mostKilled']['name'])
-    msg += "<code>{:<5}</code> times I've been slaughted by {}\n\n".format(
-        stats['mostKilledBy']['times'], stats['mostKilledBy']['name'])
+    
+    if stats:
+        msg = "<a href='tg://user?id={}'>{} the {}</a>\n".format(user_id, name, stats['mostCommonRole']) if not by_id else "{} the {}\n".format(name, stats['mostCommonRole'])
+        msg += "<code>{:<5}</code> Achievements Unlocked!\n".format(achievements)
+        msg += "<code>{:<5}</code> Games Won <code>({}%)</code>\n".format(stats['won']['total'], stats['won']['percent'])
+        msg += "<code>{:<5}</code> Games Lost <code>({}%)</code>\n".format(stats['lost']['total'], stats['lost']['percent'])
+        msg += "<code>{:<5}</code> Games Survived <code>({}%)</code>\n".format(
+            stats['survived']['total'], stats['survived']['percent'])
+        msg += "<code>{:<5}</code> Total Games\n".format(stats['gamesPlayed'])
+        msg += "<code>{:<5}</code> times I've gleefully killed {}\n".format(
+            stats['mostKilled']['times'], stats['mostKilled']['name'])
+        msg += "<code>{:<5}</code> times I've been slaughted by {}\n\n".format(
+            stats['mostKilledBy']['times'], stats['mostKilledBy']['name'])
+    else:
+        msg = "<a href='tg://user?id={}'>{}</a> has not played any games.".format(user_id, name) if not by_id else "{} has not played any games.".format(name)
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
