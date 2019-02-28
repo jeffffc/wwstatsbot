@@ -129,7 +129,7 @@ def display_stats(bot, update, args):
         name = update.message.reply_to_message.from_user.first_name
     else:
         if args:
-	    try:
+            try:
                 user_id = int(args[0])
                 name = args[0]
             except:
