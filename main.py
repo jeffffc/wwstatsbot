@@ -6,6 +6,7 @@
 # license - GPL
 
 # edited by @jeffffc
+# /search by @jamiscs
 
 import requests
 import logging
@@ -17,6 +18,7 @@ from telegram.ext.dispatcher import run_async
 import datetime
 import json
 
+from unidecode import unidecode
 from config import BOT_TOKEN, LOG_GROUP_ID
 
 import wwstats
@@ -35,7 +37,7 @@ def get_achievement_count(user_id):
     wuff_url = "http://www.tgwerewolf.com/Stats/PlayerAchievements/?pid={}&json=true"
     r = requests.get(wuff_url.format(user_id)).json()
     return len(r)
-	
+
 def get_kills(user_id):
     wuff_url = "http://www.tgwerewolf.com/Stats/PlayerKills/?pid={}&json=true"
     kills = requests.get(wuff_url.format(user_id)).json()
@@ -50,7 +52,12 @@ def get_deaths(user_id):
     wuff_url = "http://www.tgwerewolf.com/Stats/PlayerDeaths/?pid={}&json=true"
     deaths = requests.get(wuff_url.format(user_id)).json()
     return deaths
-	
+
+def get_achievements(user_id):
+    wuff_url = "http://www.tgwerewolf.com/Stats/PlayerAchievements/?pid={}&json=true"
+    r = requests.get(wuff_url.format(user_id)).json()
+    return r
+
 @run_async
 def display_kills(bot, update):
     chat_id = update.message.chat_id
@@ -61,18 +68,18 @@ def display_kills(bot, update):
         user_id = update.message.from_user.id
         name = update.message.from_user.first_name
 
-    print("%s - %s (%d) - kills" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
+    print("%s - %s (%d) - kills" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), unidecode(name), user_id))
 
     kills = get_kills(user_id)
 
     msg = "Players <a href='tg://user?id={}'> {}</a> most killed:\n".format(user_id, name)
-    
+
     for n in range(len(kills)):
         msg += "<code>{:<5}</code> <b>{}</b>\n".format(kills[n]['times'],kills[n]['name'])
-    
+
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
-@run_async	
+@run_async
 def display_killed_by(bot, update):
     chat_id = update.message.chat_id
     if update.message.reply_to_message is not None:
@@ -82,15 +89,15 @@ def display_killed_by(bot, update):
         user_id = update.message.from_user.id
         name = update.message.from_user.first_name
 
-    print("%s - %s (%d) - killed by" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
+    print("%s - %s (%d) - killed by" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), unidecode(name), user_id))
 
     killedby = get_killed_by(user_id)
 
     msg = "Players who killed <a href='tg://user?id={}'>{}</a> most:\n".format(user_id, name)
-    
+
     for n in range(len(killedby)):
         msg += "<code>{:<5}</code> <b>{}</b>\n".format(killedby[n]['times'],killedby[n]['name'])
-    
+
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
 @run_async
@@ -103,25 +110,59 @@ def display_deaths(bot, update):
         user_id = update.message.from_user.id
         name = update.message.from_user.first_name
 
-    print("%s - %s (%d) - deaths" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
+    print("%s - %s (%d) - deaths" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), unidecode(name), user_id))
 
     deaths = get_deaths(user_id)
     stats = get_stats(user_id)
 
     msg = "Types of deaths that <a href='tg://user?id={}'>{}</a> most had:\n".format(user_id, name)
-    
+
     for n in range(len(deaths)):
-        
+
         """ The total of deaths for each kill method is calculated based on the percentage
         gave by the JSON data. Because of that, the calculated value is not totally accurate."""
-	
+
         totalMethod = ((stats['gamesPlayed']-stats['survived']['total'])*float(deaths[n]['percent'])/100)
         msg += "<code>{}%</code>   <b>{}</b>   <code>(approx. {})</code>\n".format(deaths[n]['percent'],deaths[n]['method'],round(totalMethod))
-		
+
         """msg += "<code>({}%)</code> <b>{}</b>\n".format(deaths[n]['percent'],deaths[n]['method'])"""
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
-	
-@run_async	
+
+@run_async
+def display_search(bot, update, args):
+    chat_id = update.message.chat_id
+    if update.message.reply_to_message is not None:
+        user_id = update.message.reply_to_message.from_user.id
+        name = update.message.reply_to_message.from_user.first_name
+    else:
+        user_id = update.message.from_user.id
+        name = update.message.from_user.first_name
+
+    print("%s - %s (%d) - search %s" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), unidecode(name), user_id, args))
+
+    if len(args) == 0:
+        msg = "Invalid parameter! Syntax:\n<code>/search [achievement_to_search]</code>\n"
+    else:
+        found_counter = 0
+        achv_name = ""
+        achv = get_achievements(user_id)
+        msg = "Attained achievements of <a href='tg://user?id={}'>{}</a> found:\n".format(user_id, name)
+        for item in range(len(achv)):
+            achv_name = "{}".format(achv[item]['name'])
+
+            for n in range(len(achv_name.split())):
+                for word in range(len(args)):
+                    if  achv_name.split()[n].lower().startswith(args[word].lower()):
+                        msg += "<code>{}</code>\n".format(achv_name)
+                        found_counter+=1
+                        break
+
+        if found_counter == 0:
+            msg += "<b>No matching achievements found!</b>\n"
+
+    bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
+
+@run_async
 def display_stats(bot, update, args):
     by_id = False
     chat_id = update.message.chat_id
@@ -140,12 +181,12 @@ def display_stats(bot, update, args):
         else:
             user_id = update.message.from_user.id
             name = update.message.from_user.first_name
-    
-    print("%s - %s (%d) - stats" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
+
+    print("%s - %s (%d) - stats" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), unidecode(name), user_id))
 
     stats = get_stats(user_id)
     achievements = get_achievement_count(user_id)
-    
+
     if stats:
         msg = "<a href='tg://user?id={}'>{} the {}</a>\n".format(user_id, name, stats['mostCommonRole']) if not by_id else "{} the {}\n".format(name, stats['mostCommonRole'])
         msg += "<code>{:<5}</code> Achievements Unlocked!\n".format(achievements)
@@ -163,14 +204,12 @@ def display_stats(bot, update, args):
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
-
 def display_about(bot, update):
     chat_id = update.message.chat_id
     msg = "Use /stats for stats. Use /achievements or /achv for achivement list."
     msg += "\n\nThis is an edited version to the old `@wolfcardbot`.\n"
     msg += "Click [here](http://pastebin.com/efZ4CPXJ) to check the original source code.\n"
     msg += "Click [here](https://github.com/jeffffc/wwstatsbot) for the source code of the current project."
-
     bot.sendMessage(chat_id, msg, parse_mode="Markdown", disable_web_page_preview=True)
 
 
@@ -181,13 +220,12 @@ def startme(bot, update):
     else:
         return
 
-
 @run_async
 def display_achv(bot, update):
     user_id = update.message.from_user.id
     name = update.message.from_user.first_name
 
-    print("%s - %s (%d) - achv" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), name, user_id))
+    print("%s - %s (%d) - achv" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), unidecode(name), user_id))
 
     msgs = wwstats.check(user_id)
 
@@ -222,6 +260,7 @@ def main():
     d.add_handler(CommandHandler('kills', display_kills))
     d.add_handler(CommandHandler('killedby', display_killed_by))
     d.add_handler(CommandHandler('deaths', display_deaths))
+    d.add_handler(CommandHandler(['search', 'sch'], display_search, pass_args=True))
     d.add_handler(CommandHandler('about', display_about))
     d.add_handler(CommandHandler(['achievements', 'achv'], display_achv))
     d.add_error_handler(error_handler)
