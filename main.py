@@ -208,9 +208,9 @@ def display_stats(bot, update, args):
             stats['survived']['total'], stats['survived']['percent'])
         msg += "<code>{:<5}</code> Total Games\n".format(stats['gamesPlayed'])
         msg += "<code>{:<5}</code> times I've gleefully killed {}\n".format(
-            stats['mostKilled']['times'], escape.html(stats['mostKilled']['name']))
+            stats['mostKilled']['times'], html.escape(stats['mostKilled']['name']))
         msg += "<code>{:<5}</code> times I've been slaughted by {}\n\n".format(
-            stats['mostKilledBy']['times'], escape.html(stats['mostKilledBy']['name']))
+            stats['mostKilledBy']['times'], html.escape(stats['mostKilledBy']['name']))
     else:
         msg = "<a href='tg://user?id={}'>{}</a> has not played any games.".format(user_id, name) if not by_id else "{} has not played any games.".format(name)
 
