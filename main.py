@@ -78,7 +78,7 @@ def display_kills(bot, update):
     msg = "Players <a href='tg://user?id={}'> {}</a> most killed:\n".format(user_id, name)
 
     for n in range(len(kills)):
-        msg += "<code>{:<5}</code> <b>{}</b>\n".format(kills[n]['times'],kills[n]['name'])
+        msg += "<code>{:<5}</code> <b>{}</b>\n".format(kills[n]['times'], html.escape(kills[n]['name']))
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
@@ -101,7 +101,7 @@ def display_killed_by(bot, update):
     msg = "Players who killed <a href='tg://user?id={}'>{}</a> most:\n".format(user_id, name)
 
     for n in range(len(killedby)):
-        msg += "<code>{:<5}</code> <b>{}</b>\n".format(killedby[n]['times'],killedby[n]['name'])
+        msg += "<code>{:<5}</code> <b>{}</b>\n".format(killedby[n]['times'], html.escape(killedby[n]['name']))
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
