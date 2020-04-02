@@ -224,10 +224,11 @@ def startme(bot, update):
 def display_achv(bot, update):
     user_id = update.message.from_user.id
     name = update.message.from_user.first_name
+    lang = update.message.from_user.language_code
 
     print("%s - %s (%d) - achv" % (str(datetime.datetime.now()+datetime.timedelta(hours=8)), unidecode(name), user_id))
 
-    msgs = wwstats.check(user_id)
+    msgs = wwstats.check(user_id, lang)
 
     try:
         for msg in msgs:
