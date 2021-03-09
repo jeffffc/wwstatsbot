@@ -17,6 +17,7 @@ from telegram.ext import CommandHandler
 from telegram.ext.dispatcher import run_async
 import datetime
 import json
+import html
 
 from unidecode import unidecode
 from config import BOT_TOKEN, LOG_GROUP_ID
@@ -80,6 +81,8 @@ def display_kills(bot, update, args):
         else:
             user_id = update.message.from_user.id
             name = update.message.from_user.first_name
+    name = html.escape(name)
+
 
     print(
         "%s - %s (%d) - kills" % (str(datetime.datetime.now() + datetime.timedelta(hours=8)), unidecode(name), user_id))
@@ -89,7 +92,7 @@ def display_kills(bot, update, args):
     msg = "Players <a href='tg://user?id={}'> {}</a> most killed:\n".format(user_id, name)
 
     for n in range(len(kills)):
-        msg += "<code>{:<5}</code> <b>{}</b>\n".format(kills[n]['times'], kills[n]['name'])
+        msg += "<code>{:<5}</code> <b>{}</b>\n".format(kills[n]['times'], html.escape(kills[n]['name']))
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
@@ -111,6 +114,7 @@ def display_killed_by(bot, update, args):
         else:
             user_id = update.message.from_user.id
             name = update.message.from_user.first_name
+    name = html.escape(name)
 
     print("%s - %s (%d) - killed by" % (
     str(datetime.datetime.now() + datetime.timedelta(hours=8)), unidecode(name), user_id))
@@ -120,7 +124,7 @@ def display_killed_by(bot, update, args):
     msg = "Players who killed <a href='tg://user?id={}'>{}</a> most:\n".format(user_id, name)
 
     for n in range(len(killedby)):
-        msg += "<code>{:<5}</code> <b>{}</b>\n".format(killedby[n]['times'], killedby[n]['name'])
+        msg += "<code>{:<5}</code> <b>{}</b>\n".format(killedby[n]['times'], html.escape(killedby[n]['name']))
 
     bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
 
@@ -142,6 +146,8 @@ def display_deaths(bot, update, args):
         else:
             user_id = update.message.from_user.id
             name = update.message.from_user.first_name
+    name = html.escape(name)
+
 
     print("%s - %s (%d) - deaths" % (
     str(datetime.datetime.now() + datetime.timedelta(hours=8)), unidecode(name), user_id))
@@ -170,9 +176,11 @@ def display_search(bot, update, args):
     if update.message.reply_to_message is not None:
         user_id = update.message.reply_to_message.from_user.id
         name = update.message.reply_to_message.from_user.first_name
+        name = html.escape(name)
     else:
         user_id = update.message.from_user.id
         name = update.message.from_user.first_name
+        name = html.escape(name)
 
     print("%s - %s (%d) - search %s" % (
     str(datetime.datetime.now() + datetime.timedelta(hours=8)), unidecode(name), user_id, args))
@@ -207,6 +215,7 @@ def display_stats(bot, update, args):
     if update.message.reply_to_message is not None:
         user_id = update.message.reply_to_message.from_user.id
         name = update.message.reply_to_message.from_user.first_name
+        name = html.escape(name)
     else:
         if args:
             try:
@@ -216,9 +225,11 @@ def display_stats(bot, update, args):
             except:
                 user_id = update.message.from_user.id
                 name = update.message.from_user.first_name
+                name = html.escape(name)
         else:
             user_id = update.message.from_user.id
             name = update.message.from_user.first_name
+            name = html.escape(name)
 
     print(
         "%s - %s (%d) - stats" % (str(datetime.datetime.now() + datetime.timedelta(hours=8)), unidecode(name), user_id))
@@ -237,10 +248,12 @@ def display_stats(bot, update, args):
         msg += "<code>{:<5}</code> Games Survived <code>({}%)</code>\n".format(
             stats['survived']['total'], stats['survived']['percent'])
         msg += "<code>{:<5}</code> Total Games\n".format(stats['gamesPlayed'])
-        msg += "<code>{:<5}</code> times I've gleefully killed {}\n".format(
-            stats['mostKilled']['times'], stats['mostKilled']['name'])
-        msg += "<code>{:<5}</code> times I've been slaughted by {}\n\n".format(
-            stats['mostKilledBy']['times'], stats['mostKilledBy']['name'])
+        if stats['mostKilled']:
+            msg += "<code>{:<5}</code> times I've gleefully killed {}\n".format(
+                stats['mostKilled']['times'], html.escape(stats['mostKilled']['name']))
+        if stats['mostKilledBy']:
+            msg += "<code>{:<5}</code> times I've been slaughted by {}\n\n".format(
+                stats['mostKilledBy']['times'], html.escape(stats['mostKilledBy']['name']))
     else:
         msg = "<a href='tg://user?id={}'>{}</a> has not played any games.".format(user_id,
                                                                                   name) if not by_id else "{} has not played any games.".format(
@@ -271,6 +284,7 @@ def display_achv(bot, update):
     user_id = update.message.from_user.id
     name = update.message.from_user.first_name
     lang = update.message.from_user.language_code
+    name = html.escape(name)
 
     print(
         "%s - %s (%d) - achv" % (str(datetime.datetime.now() + datetime.timedelta(hours=8)), unidecode(name), user_id))
