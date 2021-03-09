@@ -1,8 +1,9 @@
 import requests
 from achvlist import ACHV
 
-achv_names = [y['name'] for y in ACHV]
-total = len(ACHV)
+langs = ACHV.keys()
+total = len(ACHV['en'])
+achv_names = {lang : [y['name'] for y in ACHV[lang]] for lang in langs}
 
 
 def chunks(l, n):
@@ -11,26 +12,27 @@ def chunks(l, n):
         yield l[i:i + n]
 
 
-def check(userid):
+def check(userid, lang):
+    lang = 'en' if lang not in langs else lang
     url = "http://tgwerewolf.com/stats/PlayerAchievements/?pid={}&json=true".format(userid)
     stats = requests.get(url).json()
     attained_count = len(stats)
     attained_names = [each['name'] for each in stats]
-    not_via_playing = [z for z in ACHV if z['name'] not in attained_names and "not_via_playing" in z]
-    inactive = [z for z in ACHV if z['name'] not in attained_names and "inactive" in z]
-    missing = [z for z in ACHV if z['name'] not in attained_names and not ("inactive" in z or "not_via_playing" in z)]
-    
+    not_via_playing = [z for z in ACHV[lang] if z['name'] not in attained_names and "not_via_playing" in z]
+    inactive = [z for z in ACHV[lang] if z not in attained_names and "inactive" in z]
+    missing = [z for z in ACHV[lang] if z not in attained_names and not ("inactive" in z or "not_via_playing" in z)]
+
     msgs = []
     header = "*ATTAINED ({0}/{1}):*\n".format(attained_count, total)
     msg = ""
-    
+
     for each in stats:
-        if each['name'] in achv_names:
+        if each['name'] in achv_names['en']:
             msg += "- {}\n".format(each['name'])
-    
+
     msg = header + "```" + msg + "```"
     msgs.append(msg)
-    
+
     main = "*MISSING ({0}/{1}):*\n".format(total - attained_count , total)
     missing_header = "*MISSING AND ATTAINABLE VIA PLAYING ({0}/{1}):*\n\n".format(len(missing) , total)
     missing_msgs = []
@@ -42,7 +44,7 @@ def check(userid):
         msg = main + missing_header
         msg += "".join(each)
         msgs.append(msg)
-    
+
     not_via_playing_header = "*NOT DIRECTLY ATTAINABLE VIA PLAYING ({0}/{1}):*\n\n".format(len(not_via_playing) , total)
     not_via_playing_msgs = []
     for z in not_via_playing:
@@ -53,7 +55,7 @@ def check(userid):
         msg = main + not_via_playing_header
         msg += "".join(each)
         msgs.append(msg)
-    
+
     inactive_header = "*INACTIVE ({0}/{1}):*\n\n".format(len(inactive) , total)
     inactive_msgs = []
     for z in inactive:
@@ -64,5 +66,5 @@ def check(userid):
         msg = main + inactive_header
         msg += "".join(each)
         msgs.append(msg)
-    
+
     return msgs
