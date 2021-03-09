@@ -1,9 +1,9 @@
 import requests
 from achvlist import ACHV
 
-achv_names = {'en': [y['name'] for y in ACHV['en']], 'fa': [y['name'] for y in ACHV['fa']]}
-total = len(ACHV['en'])
 langs = ACHV.keys()
+total = len(ACHV['en'])
+achv_names = {lang : [y['name'] for y in ACHV[lang]] for lang in langs}
 
 
 def chunks(l, n):
