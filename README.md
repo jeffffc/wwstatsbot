@@ -10,5 +10,4 @@
 
 ## Credits
 - Originally made by Carson True
-- Original source code is [here](http://pastebin.com/efZ4CPXJ)
 - Edited by @jeffffc ([Telegram profile here](http://t.me/jeffffc))
