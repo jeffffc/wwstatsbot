@@ -7,6 +7,7 @@
 
 # edited by @jeffffc
 # /search by @jamiscs
+# /info by @Olgabrezel
 
 import requests
 import logging
@@ -21,6 +22,7 @@ import html
 
 from unidecode import unidecode
 from config import BOT_TOKEN, LOG_GROUP_ID
+from achvlist import ACHV
 
 import wwstats
 
@@ -255,6 +257,41 @@ def display_achv(bot, update):
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text("You have to start me in PM first.", reply_markup=reply_markup)
 
+def display_achv_info(bot, update, args):
+    chat_id = update.message.chat_id
+    user_id = update.message.from_user.id
+    name = update.message.from_user.first_name
+    name = html.escape(name)
+
+    search = ""
+    if len(args) > 0:
+        search = ' '.join(args)
+    elif update.message.reply_to_message and update.message.reply_to_message.text:
+        search = update.message.reply_to_message.text
+
+    print("%s - %s (%d) - info %s" % (
+    str(datetime.datetime.now() + datetime.timedelta(hours=8)), unidecode(name), user_id, args))
+
+    if len(search) == 0:
+        msg = "Invalid parameter! Syntax:\n<code>/info [achievement_to_search]</code>\n"
+    else:
+        found = []
+        for item in range(len(ACHV)):
+            achv_name = "{}".format(ACHV[item]['name'])
+            if search.lower() in achv_name.lower():
+                found.append(ACHV[item])
+
+        if not found:
+            msg = "No matching achievements found!\n"
+        elif len(found) == 1:
+            msg = "<b>Achievement info:</b>\n\n" \
+                  "<b>{}</b>\n{}\n".format(found[0]['name'], found[0]['desc'])
+        else:
+            msg = "<b>Multiple achievements found!</b>\nTry one of these:\n"
+            msg += "\n".join("<code>/info {}</code>".format(achv['name']) for achv in found) + "\n"
+
+    bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
+
 
 def error_handler(bot, update, error):
     e = str(error).lower()
@@ -278,6 +315,7 @@ def main():
     d.add_handler(CommandHandler(['search', 'sch'], display_search, pass_args=True))
     d.add_handler(CommandHandler('about', display_about))
     d.add_handler(CommandHandler(['achievements', 'achv'], display_achv))
+    d.add_handler(CommandHandler(['info', 'getachv'], display_achv_info, pass_args=True))
     d.add_error_handler(error_handler)
     u.start_polling(clean=True)
     u.idle()
