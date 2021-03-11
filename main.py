@@ -155,18 +155,21 @@ def display_search(bot, update, args):
         msg = "Invalid parameter! Syntax:\n<code>/search [achievement_to_search]</code>\n"
     else:
         found_counter = 0
-        achv_name = ""
         achv = get_achievements(user_id)
         msg = "Attained achievements of <a href='tg://user?id={}'>{}</a> found:\n".format(user_id, name)
         for item in range(len(achv)):
             achv_name = "{}".format(achv[item]['name'])
+            found_this = False
 
             for n in range(len(achv_name.split())):
                 for word in range(len(args)):
-                    if  achv_name.split()[n].lower().startswith(args[word].lower()):
+                    if achv_name.split()[n].lower().startswith(args[word].lower()):
                         msg += "<code>{}</code>\n".format(achv_name)
-                        found_counter+=1
+                        found_this = True
+                        found_counter += 1
                         break
+                if found_this:
+                    break
 
         if found_counter == 0:
             msg += "<b>No matching achievements found!</b>\n"
