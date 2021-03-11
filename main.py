@@ -227,7 +227,6 @@ def display_about(bot, update):
     chat_id = update.message.chat_id
     msg = "Use /stats for stats. Use /achievements or /achv for achivement list."
     msg += "\n\nThis is an edited version to the old `@wolfcardbot`.\n"
-    msg += "Click [here](http://pastebin.com/efZ4CPXJ) to check the original source code.\n"
     msg += "Click [here](https://github.com/jeffffc/wwstatsbot) for the source code of the current project."
     bot.sendMessage(chat_id, msg, parse_mode="Markdown", disable_web_page_preview=True)
 
