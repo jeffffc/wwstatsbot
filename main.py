@@ -276,6 +276,8 @@ def display_achv_info(bot, update, args):
 
     if len(search) == 0:
         msg = "Invalid parameter! Syntax:\n<code>/info [achievement_to_search]</code>\n"
+    elif len(search) < 3:
+        msg = "Please enter at least 3 letters to search for!\n"
     else:
         found = []
         for item in range(len(ACHV)):
