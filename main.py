@@ -7,6 +7,7 @@
 
 # edited by @jeffffc
 # /search by @jamiscs
+# /info by @Olgabrezel
 
 import requests
 import logging
@@ -21,6 +22,7 @@ import html
 
 from unidecode import unidecode
 from config import BOT_TOKEN, LOG_GROUP_ID
+from achvlist import ACHV
 
 import wwstats
 
@@ -153,18 +155,21 @@ def display_search(bot, update, args):
         msg = "Invalid parameter! Syntax:\n<code>/search [achievement_to_search]</code>\n"
     else:
         found_counter = 0
-        achv_name = ""
         achv = get_achievements(user_id)
         msg = "Attained achievements of <a href='tg://user?id={}'>{}</a> found:\n".format(user_id, name)
         for item in range(len(achv)):
             achv_name = "{}".format(achv[item]['name'])
+            found_this = False
 
             for n in range(len(achv_name.split())):
                 for word in range(len(args)):
-                    if  achv_name.split()[n].lower().startswith(args[word].lower()):
+                    if achv_name.split()[n].lower().startswith(args[word].lower()):
                         msg += "<code>{}</code>\n".format(achv_name)
-                        found_counter+=1
+                        found_this = True
+                        found_counter += 1
                         break
+                if found_this:
+                    break
 
         if found_counter == 0:
             msg += "<b>No matching achievements found!</b>\n"
@@ -222,7 +227,6 @@ def display_about(bot, update):
     chat_id = update.message.chat_id
     msg = "Use /stats for stats. Use /achievements or /achv for achivement list."
     msg += "\n\nThis is an edited version to the old `@wolfcardbot`.\n"
-    msg += "Click [here](http://pastebin.com/efZ4CPXJ) to check the original source code.\n"
     msg += "Click [here](https://github.com/jeffffc/wwstatsbot) for the source code of the current project."
     bot.sendMessage(chat_id, msg, parse_mode="Markdown", disable_web_page_preview=True)
 
@@ -255,6 +259,43 @@ def display_achv(bot, update):
         reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text("You have to start me in PM first.", reply_markup=reply_markup)
 
+def display_achv_info(bot, update, args):
+    chat_id = update.message.chat_id
+    user_id = update.message.from_user.id
+    name = update.message.from_user.first_name
+    name = html.escape(name)
+
+    search = ""
+    if len(args) > 0:
+        search = ' '.join(args)
+    elif update.message.reply_to_message and update.message.reply_to_message.text:
+        search = update.message.reply_to_message.text
+
+    print("%s - %s (%d) - info %s" % (
+    str(datetime.datetime.now() + datetime.timedelta(hours=8)), unidecode(name), user_id, args))
+
+    if len(search) == 0:
+        msg = "Invalid parameter! Syntax:\n<code>/info [achievement_to_search]</code>\n"
+    elif len(search) < 3:
+        msg = "Please enter at least 3 letters to search for!\n"
+    else:
+        found = []
+        for item in range(len(ACHV)):
+            achv_name = "{}".format(ACHV[item]['name'])
+            if search.lower() in achv_name.lower():
+                found.append(ACHV[item])
+
+        if not found:
+            msg = "No matching achievements found!\n"
+        elif len(found) == 1:
+            msg = "<b>Achievement info:</b>\n\n" \
+                  "<b>{}</b>\n{}\n".format(found[0]['name'], found[0]['desc'])
+        else:
+            msg = "<b>Multiple achievements found!</b>\nTry one of these:\n"
+            msg += "\n".join("<code>/info {}</code>".format(achv['name']) for achv in found) + "\n"
+
+    bot.sendMessage(chat_id, msg, parse_mode="HTML", disable_web_page_preview=True)
+
 
 def error_handler(bot, update, error):
     e = str(error).lower()
@@ -278,6 +319,7 @@ def main():
     d.add_handler(CommandHandler(['search', 'sch'], display_search, pass_args=True))
     d.add_handler(CommandHandler('about', display_about))
     d.add_handler(CommandHandler(['achievements', 'achv'], display_achv))
+    d.add_handler(CommandHandler(['info', 'getachv'], display_achv_info, pass_args=True))
     d.add_error_handler(error_handler)
     u.start_polling(clean=True)
     u.idle()
